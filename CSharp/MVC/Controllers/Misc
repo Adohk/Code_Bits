@@ -1,7 +1,7 @@
 //Notes
 	-Can use CustomAttribues [CustomAttributeName] before every action or before the controller to make it global.
 	-ModelState.IsValid checks if the info complies with the given model in the action.
-
+ 
 //Attributes
 [AllowAnonymous]
 [HttpPost]
