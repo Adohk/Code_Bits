@@ -99,31 +99,31 @@ public JavaScriptResult UploadExcel(HttpPostedFileBase FileUpload) {
                 if (row > 100) { break; }
                 row++;
                 /* Validations */
-				try {                                
-					SomeValidationViewModel u = a
-					ModelState.Clear();
-					//Manually validate model (Throws exception) otherwise "TryValidateModel" returns a boolean.
-					ValidateModel(u);
+		try {                                
+			SomeValidationViewModel u = a
+			ModelState.Clear();
+			//Manually validate model (Throws exception) otherwise "TryValidateModel" returns a boolean.
+			ValidateModel(u);
 
-					//Mapping viewmodel to model using AutoMapper
-					var config = new MapperConfiguration(cfg => {
-						cfg.CreateMap<SomeValidationViewModel, Model1>();
-					});
-					IMapper mapper = config.CreateMapper();
-					var users = mapper.Map<SomeValidationViewModel, Model1>(u);
+			//Mapping viewmodel to model using AutoMapper
+			var config = new MapperConfiguration(cfg => {
+				cfg.CreateMap<SomeValidationViewModel, Model1>();
+			});
+			IMapper mapper = config.CreateMapper();
+			var users = mapper.Map<SomeValidationViewModel, Model1>(u);
 
-					db.Model1.Add(users);
-					db.SaveChanges();
-				} catch (Exception) {
-					db.Dispose();
-					//Check all errors in ModelState
-					var query = from state in ModelState.Values
-								from error in state.Errors
-								select error.ErrorMessage;
-					var er = query.ToArray();
-					errors.AppendLine("User: " + a.ID + " With Errors in Row: " + row + " Cause: " + er.FirstOrDefault() + ".");
-					counter++;
-				}                                        
+			db.Model1.Add(users);
+			db.SaveChanges();
+		} catch (Exception) {
+			db.Dispose();
+			//Check all errors in ModelState
+			var query = from state in ModelState.Values
+						from error in state.Errors
+						select error.ErrorMessage;
+			var er = query.ToArray();
+			errors.AppendLine("User: " + a.ID + " With Errors in Row: " + row + " Cause: " + er.FirstOrDefault() + ".");
+			counter++;
+		}                                        
             }
             //Deleting excel file from folder  
             if ((System.IO.File.Exists(pathToExcelFile))) {
