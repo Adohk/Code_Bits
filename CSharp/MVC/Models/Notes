@@ -1,0 +1,7 @@
+
+-EF6 Doesn't support UNIQUE in MSSQL
+
+-Always include to ViewModels:
+  -using System.ComponentModel.DataAnnotations;
+  -using System.Web.Mvc;
+
