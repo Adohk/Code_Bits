@@ -1,0 +1,181 @@
+//Partial _ViewStart for default.
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+//A _layout with no cache and var for URL.
+@{
+    string CurrentURL = Request.Url.AbsoluteUri;
+    HttpContext.Current.Response.AddHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    HttpContext.Current.Response.AddHeader("Pragma", "no-cache");
+    HttpContext.Current.Response.AddHeader("Expires", "0");
+}
+
+//For device width.
+<meta name="viewport" content="width=device-width" />
+
+//ActionLink in <a>
+<a href="@Url.Action("Index","Home")" class="navbar-brand">
+
+//Normal ActionLink
+@Html.ActionLink("My Link", "Index", "Home")
+
+//Bundle renders.
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/jquery")
+
+//Check if url..
+@if (CurrentURL.Contains("Create")){
+	@Scripts.Render("~/bundles/bootstrap-datepicker");
+}
+
+//Populate DropDownList.
+@Html.DropDownListFor(model => model.Field, new SelectList(
+	   new List<Object>{ new { value = "SomeValue" , text = "SomeText"  }, 
+	   }, "value", "text", 2
+), new { htmlAttributes = new { @class = "form-control" } })
+
+//Populate DropDownList with ViewBag.
+@Html.DropDownListFor(model => model.Users, new SelectList(
+	ViewBag.Users, "value", "text", 2), new { htmlAttributes = new { @class = "form -control" } })
+
+//Call to Action from <a>
+<a class="btn btn-primary" href="/Controller/Action/">Download</a>
+
+//List content from multiple models using ViewModel.
+@foreach (var item in Model.Computers) {
+	@Html.DisplayFor(modelItem => item.Code)
+	@Html.DisplayFor(model => model.Users.FirstOrDefault(x => x.Id == item.User_Id).Name)
+}
+
+//Force format to display.
+@Html.ValueFor(modelItem => item.Date, "{0:dd-MM-yyyy}")
+
+//Give ActionLinks Class params with dashes (Underscores become dashes on render).
+@Html.ActionLink(" ", "Details", new { id = item.ID }, 
+	new { 	@class = "glyphicon glyphicon-info-sign", 
+			@data_toggle = "tooltip", 
+			@data_placement = "left", 
+			@data_original_title = "Details" })
+			
+//Instance Tooltips.
+<script type="text/javascript">
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+</script>
+			
+
+//Ajax Form.
+@using (Ajax.BeginForm("UploadExcel", "Controller", new AjaxOptions() { 
+	HttpMethod = "POST", 
+	UpdateTargetId= "result" }, 	//What html content to replace
+	new { enctype = "multipart/form-data" })) { }
+
+//Script to make Ajax upload a file.
+<script>
+	window.addEventListener("submit", function (e) {
+		var form = e.target;
+		if (form.getAttribute("enctype") === "multipart/form-data") {
+			if (form.dataset.ajax) {
+				e.preventDefault();
+				e.stopImmediatePropagation();
+				var xhr = new XMLHttpRequest();
+				xhr.open(form.method, form.action);
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState == 4 && xhr.status == 200) {
+						if (form.dataset.ajaxUpdate) {
+							var updateTarget = document.querySelector(form.dataset.ajaxUpdate);
+							if (updateTarget) {
+								updateTarget.innerHTML = xhr.responseText;
+							}
+						}
+					}
+				};
+				xhr.send(new FormData(form));
+			}
+		}
+	}, true);
+</script>
+
+//Html to Ajax event to update a partial view.
+<script>
+	$('#myid').change(function () {
+		var selectedValue = $('#myid').val();
+		$.ajax({
+			url: '@Url.Action("Create_logic", "Controller")',
+			data: { selection: selectedValue },
+			cache: false,
+			type: "POST"
+		}).done(function (partialViewResult) {
+			$("#update").html(partialViewResult);
+			if (selectedValue == "astring") {
+				$('#myotheridiwanttohide').hide();
+				//recreate your controls
+			} else {
+				//recreate your controls
+			}                
+		});
+	});
+</script>
+
+//Body Template
+<body>
+	//partial renders
+    @if (Session["UserID"] == null) {
+            @Html.Partial("_Login");
+    }
+    @Html.Partial("_NavBar")
+    <div id="cont" class="container body-content">		
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year.</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+
+//Sections.
+//They will be places where the rendersection was placed on the Layout.
+@section scripts{ }
+
+//HTML form & modal template
+@model MyApp.ViewModels.LoginViewModel
+@using (Html.BeginForm("Login", "Home", FormMethod.Post)) {
+    @Html.AntiForgeryToken()
+    <div id="LoginModal" class="modal fade animated bounceInDown">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Login</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @maxlength = "30" } })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Pass, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Pass, new { htmlAttributes = new { @class = "form-control", @type = "password" } })
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Log In</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
