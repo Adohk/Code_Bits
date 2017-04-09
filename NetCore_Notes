@@ -38,3 +38,6 @@ Scaffold-DbContext "Server=(localdb)\mssqllocaldb;Database=db;Trusted_Connection
   "ConnectionStrings": {
     "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=aspnet-WebApplication2-c6e863f8-452e-4fc5-9c4e-4db4cbb3d405;Trusted_Connection=True;MultipleActiveResultSets=true"
   },
+  
+  
+  https://docs.microsoft.com/en-us/ef/core/get-started/aspnetcore/existing-db
