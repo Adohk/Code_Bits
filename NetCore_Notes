@@ -1,0 +1,12 @@
+VS2015 can't open SDK 1.0.1 versions of NetCore..
+
+Switch NetCore sdk versions on folder.
+
+-Create Global.json on target folder.
+-Add a version from the sdk's from "C:\Program Files\dotnet\sdk" on the Global.Json:
+
+{
+   "sdk": { "version": "versionName" }
+}
+
+-Run CLI dotnet --version on target folder to check changes.
