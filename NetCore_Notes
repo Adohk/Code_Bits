@@ -1,4 +1,7 @@
-VS2015 can't open SDK 1.0.1 versions of NetCore..
+VS2015 can't open SDK 1.1.1 versions of NetCore..
+latest version for vs2015:
+https://go.microsoft.com/fwlink/?LinkID=835014
+(dotnet-dev-win-x64.1.0.0-preview2-1-003177)
 
 Switch NetCore sdk versions on folder.
 
