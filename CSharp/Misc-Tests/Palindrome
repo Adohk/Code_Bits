@@ -1,0 +1,17 @@
+using System;
+
+namespace ConsoleApplication3 {
+    class Program {
+        public static bool IsPalindrome(string word) {
+            word = word.ToLower();
+            char[] _word = word.ToCharArray();
+            Array.Reverse(_word);
+            return (word.Equals(new string(_word)));
+        }
+
+        public static void Main(string[] args) {
+            Console.WriteLine(Program.IsPalindrome("Deleveled"));
+        }
+    }
+}
+
