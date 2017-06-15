@@ -1,0 +1,35 @@
+using System;
+using System.Text;
+
+namespace ConsoleApplication3 {
+    public class TextInput {
+        StringBuilder result = new StringBuilder();
+        public virtual void Add(char c) {
+            result.Append(c);
+        }
+
+        public string GetValue() {
+            return result.ToString();
+        }
+    }
+
+    //Inherit
+    public class NumericInput : TextInput {
+        public override void Add(char c) {
+            if (char.IsNumber(c)) {
+                //use inherithed class's method
+                base.Add(c);
+            }
+        }
+    }
+
+    public class UserInput {
+        public static void Main(string[] args) {
+            TextInput input = new NumericInput();
+            input.Add('1');
+            input.Add('a');
+            input.Add('0');
+            Console.WriteLine(input.GetValue());
+        }
+    }
+}
